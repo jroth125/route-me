@@ -20,6 +20,11 @@ const Route = db.define('route', {
     country: {
         type: Sequelize.STRING,
         allowNull: true
+    },
+    isComplete: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+        allowNull: false
     }
 })
 
