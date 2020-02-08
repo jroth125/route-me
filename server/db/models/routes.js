@@ -28,4 +28,13 @@ const Route = db.define('route', {
     }
 })
 
+Route.getAllRoutes = function(userId) {
+    const allRunRoutes = Route.findAll({
+        where: {
+            userId
+        }
+    })
+    return allRunRoutes
+}
+
 module.exports = Route
