@@ -16,7 +16,7 @@ router.get('/:runId', async (req, res, next) => {
         const run = await Route.findByPK(req.params.runId)
         res.status(200).send(run)
     } catch (error) {
-        
+        next(error)
     }
 })
 
