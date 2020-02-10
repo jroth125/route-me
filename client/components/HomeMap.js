@@ -19,6 +19,8 @@ export default class HomeMap extends Component {
       destination: '',
       prefMiles: 0
     }
+    this.plus = this.plus.bind(this)
+    this.minus = this.plus.bind(this)
   }
   async componentDidMount() {
     const origin = this.state.origin
@@ -199,7 +201,19 @@ export default class HomeMap extends Component {
     // await getRoute([-122.677738,45.522458])
   }
 
+  minus(e) {
+      e.preventDefault()
+      this.setState({prefMiles: -1 + this.state.prefMiles})
+      console.log('im in the minus')
+  }
+
+  plus(e) {
+      e.preventDefault()
+      this.setState({prefMiles: this.state.prefMiles + 1})
+  }
+
   render() {
+      const miles = this.state.prefMiles
     return (
       <div>
         <div className="map-container">
@@ -214,11 +228,11 @@ export default class HomeMap extends Component {
         />
         <div className="mapChild" id="instructions">
           <form>
-            <button>+</button>
             <span>{this.state.prefMiles}</span>
-            <button>-</button>
             <button type="submit">Submit</button>
           </form>
+          <button onClick={this.plus}>+</button>
+          <button onClick={(e) => {this.setState({prefMiles: miles - 1})}}>-</button>
         </div>
       </div>
     )
