@@ -1,16 +1,24 @@
 'use strict'
 
 const db = require('../server/db')
-const {User} = require('../server/db/models')
+const {User, Route} = require('../server/db/models')
+
+const users = [{
+  firstName: 'Jake',
+  lastName: 'Roth',
+  email: 'jake@email.com',
+  password: '123'
+}]
 
 async function seed() {
   await db.sync({force: true})
+  await User.bulkCreate(users, {ignoreDublicates: true})
   console.log('db synced!')
 
-  const users = await Promise.all([
-    User.create({email: 'cody@email.com', password: '123'}),
-    User.create({email: 'murphy@email.com', password: '123'})
-  ])
+  // const users = await Promise.all([
+  //   User.create({email: 'cody@email.com', password: '123'}),
+  //   User.create({email: 'murphy@email.com', password: '123'})
+  // ])
 
   console.log(`seeded ${users.length} users`)
   console.log(`seeded successfully`)
