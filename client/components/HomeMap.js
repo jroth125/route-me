@@ -2,10 +2,11 @@ import React, {Component} from 'react'
 import {LoadScript, GoogleMap, fitBounds} from '@react-google-maps/api'
 import mapboxgl from 'mapbox-gl'
 import axios from 'axios'
+import '../../secrets'
 
-mapboxgl.accessToken =
-  'pk.eyJ1IjoianJvdGhlbmJlcmcxMjUiLCJhIjoiY2p1d3VpZG50MGdjcDQzbXdiNmtlcWFueSJ9.OFDtycGpIKFrFQN2-dP35A'
+import GooglePlacesAutocomplete from './GooglePlacesAutocomplete'
 
+mapboxgl.accessToken = process.env.MAPBOX
 // create a function to make a directions request
 
 export default class HomeMap extends Component {
@@ -14,7 +15,7 @@ export default class HomeMap extends Component {
     this.state = {
       lng: -122.657888,
       lat: 45.5247888,
-      zoom: 13,
+      zoom: 15,
       origin: '',
       destination: '',
       prefMiles: 0
