@@ -35,64 +35,217 @@ export default class HomeMap extends Component {
       zoom: this.state.zoom
     })
 
-    map.on('move', () => {
-      this.setState({
-        lng: map.getCenter().lng.toFixed(4),
-        lat: map.getCenter().lat.toFixed(4),
-        zoom: map.getZoom().toFixed(2)
-      })
-    })
 
     this.setState({map})
 
     const start = [-73.952793, 40.672555]
-    map.on('load', function() {
-      // make an initial directions request that
-      // starts and ends at the same location
-      // getRoute(start)
+    // map.on('load', function() {
+    //   // make an initial directions request that
+    //   // starts and ends at the same location
+    //   // getRoute(start)
 
-      // Add starting point to the map
-      map.addLayer({
-        id: 'point',
-        type: 'circle',
-        source: {
-          type: 'geojson',
-          data: {
-            type: 'FeatureCollection',
-            features: [
-              {
-                type: 'Feature',
-                properties: {},
-                geometry: {
-                  type: 'Point',
-                  coordinates: start
-                }
-              }
-            ]
-          }
-        },
-        paint: {
-          'circle-radius': 10,
-          'circle-color': '#3887be'
-        }
-      })
-      // this is where the code from the next step will go
+    //   // Add starting point to the map
+    //   map.addLayer({
+    //     id: 'point',
+    //     type: 'circle',
+    //     source: {
+    //       type: 'geojson',
+    //       data: {
+    //         type: 'FeatureCollection',
+    //         features: [
+    //           {
+    //             type: 'Feature',
+    //             properties: {},
+    //             geometry: {
+    //               type: 'Point',
+    //               coordinates: start
+    //             }
+    //           }
+    //         ]
+    //       }
+    //     },
+    //     paint: {
+    //       'circle-radius': 10,
+    //       'circle-color': '#3887be'
+    //     }
+    //   })
+    //   // this is where the code from the next step will go
+    // })
+
+    // const getRoute = (end) => {
+    //   // make a directions request using cycling profile
+    //   // an arbitrary start will always be the same
+    //   // only the end or destination will change
+    //   console.log('start is', this.state.lng, this.state.lng)
+    //   const url =
+    //     'https://api.mapbox.com/directions/v5/mapbox/cycling/' +
+    //     this.state.lng +
+    //     ',' +
+    //     this.state.lat +
+    //     ';' +
+    //     end[0] +
+    //     ',' +
+    //     end[1] +
+    //     '?steps=true&geometries=geojson&access_token=' +
+    //     mapboxgl.accessToken
+
+    //   // make an XHR request https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
+    //   const req = new XMLHttpRequest()
+    //   req.open('GET', url, true)
+    //   req.onload = function() {
+    //     let json = JSON.parse(req.response)
+    //     let data = json.routes[0]
+    //     let route = data.geometry.coordinates
+    //     console.log('this is the route', route)
+    //     let geojson = {
+    //       type: 'Feature',
+    //       properties: {},
+    //       geometry: {
+    //         type: 'LineString',
+    //         coordinates: route
+    //       }
+    //     }
+    //     // if the route already exists on the map, reset it using setData
+    //     if (map.getSource('route')) {
+    //       map.getSource('route').setData(geojson)
+    //     } else {
+    //       // otherwise, make a new request
+    //       map.addLayer({
+    //         id: 'route',
+    //         type: 'line',
+    //         source: {
+    //           type: 'geojson',
+    //           data: {
+    //             type: 'Feature',
+    //             properties: {},
+    //             geometry: {
+    //               type: 'LineString',
+    //               coordinates: geojson
+    //             }
+    //           }
+    //         },
+    //         layout: {
+    //           'line-join': 'round',
+    //           'line-cap': 'round'
+    //         },
+    //         paint: {
+    //           'line-color': 'purple',
+    //           'line-width': 5,
+    //           'line-opacity': 0.75
+    //         }
+    //       })
+    //     }
+    //     // add turn instructions here at the end
+    //   }
+    //   req.send()
+    // }
+
+    // map.on('click', e => {
+    //   if (this.state.destination)
+    //     this.setState({origin: e.lngLat, destination: ''})
+    //   if (this.state.origin) this.setState({destination: e.lngLat})
+    //   else this.setState({origin: e.lngLat})
+    //   console.log('the state is', this.state)
+    //   let coordsObj = e.lngLat
+    //   //   canvas.style.cursor = '';
+    //   let coords = Object.keys(coordsObj).map(function(key) {
+    //     return coordsObj[key]
+    //   })
+    //   const end = {
+    //     type: 'FeatureCollection',
+    //     features: [
+    //       {
+    //         type: 'Feature',
+    //         properties: {},
+    //         geometry: {
+    //           type: 'Point',
+    //           coordinates: coords
+    //         }
+    //       }
+    //     ]
+    //   }
+    //   if (map.getLayer('end')) {
+    //     map.getSource('end').setData(end)
+    //   } else {
+    //     map.addLayer({
+    //       id: 'end',
+    //       type: 'circle',
+    //       source: {
+    //         type: 'geojson',
+    //         data: {
+    //           type: 'FeatureCollection',
+    //           features: [
+    //             {
+    //               type: 'Feature',
+    //               properties: {},
+    //               geometry: {
+    //                 type: 'Point',
+    //                 coordinates: coords
+    //               }
+    //             }
+    //           ]
+    //         }
+    //       },
+    //       paint: {
+    //         'circle-radius': 10,
+    //         'circle-color': '#f30'
+    //       }
+    //     })
+    //   }
+    //   getRoute(coords)
+    // })
+
+    // const response = await axios.get("https://api.mapbox.com/directions/v5/mapbox/cycling/-122.42,37.78;-77.03,38.91?access_token=pk.eyJ1IjoianJvdGhlbmJlcmcxMjUiLCJhIjoiY2p1d3VpZG50MGdjcDQzbXdiNmtlcWFueSJ9.OFDtycGpIKFrFQN2-dP35A")
+    // console.log('It is...',response)
+
+    // await getRoute([-122.677738,45.522458])
+  }
+
+  minus(e) {
+    e.preventDefault()
+    this.setState({prefMiles: -1 + this.state.prefMiles})
+    console.log('im in the minus')
+  }
+
+  plus(e) {
+    e.preventDefault()
+    this.setState({prefMiles: this.state.prefMiles + 1})
+  }
+
+  changeLtLng(lng, lat) {
+    if (this.state.homeMarker) {
+      this.state.homeMarker.remove()
+    }
+    const homeMarker = new Marker().setLngLat([lng, lat]).addTo(this.state.map)
+
+    this.setState({lng, lat, homeMarker})
+
+    this.state.map.flyTo({
+      center: [lng, lat],
+      minZoom: 3,
+      essential: true // this animation is considered essential with respect to prefers-reduced-motion
     })
+  }
 
-    const getRoute = (startLat, startLng, map) => {
+  createRoute(e, state, destination) {
+    e.preventDefault()
+    console.log('I ran!fsdfsd')
+    function getRoute(e, state, destination) {
+      const {map} = state
+      console.log('I ran!')
       // make a directions request using cycling profile
       // an arbitrary start will always be the same
       // only the end or destination will change
-      console.log('start is', this.state.lng, this.state.lat)
+      console.log('start is', state.lng, state.lng)
       const url =
-        'https://api.mapbox.com/directions/v5/mapbox/cycling/' +
-        this.state.lng +
+        'https://api.mapbox.com/directions/v5/mapbox/walking/' +
+        state.lng +
         ',' +
-        this.state.lat +
+        state.lat +
         ';' +
-        end[0] +
+        -73.958582 +
         ',' +
-        end[1] +
+        40.676386 +
         '?steps=true&geometries=geojson&access_token=' +
         mapboxgl.accessToken
 
@@ -113,13 +266,13 @@ export default class HomeMap extends Component {
           }
         }
         // if the route already exists on the map, reset it using setData
-        if (this.state.map.getSource('route')) {
-          this.state.map.getSource('route').setData(geojson)
-        } 
-        
-        else {
+        if (map.getSource('route')) {
+          console.log('already a route! Uh ohh')
+          map.getSource('route').setData(geojson)
+        } else {
+          console.log('lol there is none')
           // otherwise, make a new request
-          this.state.map.addLayer({
+          map.addLayer({
             id: 'route',
             type: 'line',
             source: {
@@ -148,101 +301,53 @@ export default class HomeMap extends Component {
       }
       req.send()
     }
+    getRoute(e, state, destination)
 
-    map.on('click', e => {
-      if (this.state.destination)
-        this.setState({origin: e.lngLat, destination: ''})
-      if (this.state.origin) this.setState({destination: e.lngLat})
-      else this.setState({origin: e.lngLat})
-      console.log('the state is', this.state)
-      let coordsObj = e.lngLat
-      //   canvas.style.cursor = '';
-      let coords = Object.keys(coordsObj).map(function(key) {
-        return coordsObj[key]
-      })
-      const end = {
-        type: 'FeatureCollection',
-        features: [
-          {
-            type: 'Feature',
-            properties: {},
-            geometry: {
-              type: 'Point',
-              coordinates: coords
-            }
-          }
-        ]
-      }
-      if (map.getLayer('end')) {
-        map.getSource('end').setData(end)
-      } else {
-        map.addLayer({
-          id: 'end',
-          type: 'circle',
-          source: {
-            type: 'geojson',
-            data: {
-              type: 'FeatureCollection',
-              features: [
-                {
-                  type: 'Feature',
-                  properties: {},
-                  geometry: {
-                    type: 'Point',
-                    coordinates: coords
-                  }
-                }
-              ]
-            }
-          },
-          paint: {
-            'circle-radius': 10,
-            'circle-color': '#f30'
-          }
-        })
-      }
-      getRoute(coords)
-    })
+    // const end = {
+    //   type: 'FeatureCollection',
+    //   features: [
+    //     {
+    //       type: 'Feature',
+    //       properties: {},
+    //       geometry: {
+    //         type: 'Point',
+    //         coordinates: coords
+    //       }
+    //     }
+    //   ]
+    // }
 
-    // const response = await axios.get("https://api.mapbox.com/directions/v5/mapbox/cycling/-122.42,37.78;-77.03,38.91?access_token=pk.eyJ1IjoianJvdGhlbmJlcmcxMjUiLCJhIjoiY2p1d3VpZG50MGdjcDQzbXdiNmtlcWFueSJ9.OFDtycGpIKFrFQN2-dP35A")
-    // console.log('It is...',response)
+    // map.on('click', e => {
+    //   if (this.state.destination)
+    //     this.setState({origin: e.lngLat, destination: ''})
+    //   if (this.state.origin) this.setState({destination: e.lngLat})
+    //   else this.setState({origin: e.lngLat})
+    //   console.log('the state is', this.state)
+    //   let coordsObj = e.lngLat
+    //   //   canvas.style.cursor = '';
+    //   let coords = Object.keys(coordsObj).map(function(key) {
+    //     return coordsObj[key]
+    //   })
+    //   const end = {
+    //     type: 'FeatureCollection',
+    //     features: [
+    //       {
+    //         type: 'Feature',
+    //         properties: {},
+    //         geometry: {
+    //           type: 'Point',
+    //           coordinates: coords
+    //         }
+    //       }
+    //     ]
+    //   }
+    //   if (map.getLayer('end')) {
+    //     map.getSource('end').setData(end)
+    //   } else {
 
-    // await getRoute([-122.677738,45.522458])
-  }
-
-  minus(e) {
-    e.preventDefault()
-    this.setState({prefMiles: -1 + this.state.prefMiles})
-    console.log('im in the minus')
-  }
-
-  plus(e) {
-    e.preventDefault()
-    this.setState({prefMiles: this.state.prefMiles + 1})
-  }
-
-  changeLtLng(lng, lat) {
-    if (this.state.homeMarker) {
-        this.state.homeMarker.remove()
-    }
-    const homeMarker = new Marker()
-    .setLngLat([lng, lat])
-    .addTo(this.state.map)
-
-    this.setState({lng, lat, homeMarker})
-
-    this.state.map.flyTo({
-      center: [
-        lng,
-        lat
-      ],
-      minZoom: 3,
-      essential: true // this animation is considered essential with respect to prefers-reduced-motion
-      });
-  }
-
-  createRoute() {
-    
+    //   }
+    //   getRoute(coords)
+    // })
   }
 
   render() {
@@ -263,7 +368,12 @@ export default class HomeMap extends Component {
           <PlacesAutocomplete changeLtLng={this.changeLtLng} />
           <form>
             <span>{this.state.prefMiles}</span>
-            <button type="submit">Find route!</button>
+            <button
+              type="submit"
+              onClick={e => this.createRoute(e, this.state)}
+            >
+              Find route!
+            </button>
           </form>
           <button onClick={this.plus}>+</button>
           <button
