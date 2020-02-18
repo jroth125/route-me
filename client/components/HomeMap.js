@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {LoadScript, GoogleMap, fitBounds} from '@react-google-maps/api'
 import mapboxgl, {Marker} from 'mapbox-gl'
+import { getDistance, computeDestinationPoint } from 'geolib';
 import uniqid from 'uniqid'
 import axios from 'axios'
 import '../../secrets'
@@ -70,6 +71,38 @@ export default class HomeMap extends Component {
   createRoute(e, state, destination) {
     e.preventDefault()
     console.log('I ran!fsdfsd')
+
+    const milesToMeters = miles => {
+      return miles / 0.00062137;
+    };
+
+    const getRandomPointsInRadius = (startingLat, startingLong, milesToRun) => {
+      const metersToRun = milesToMeters(milesToRun);
+      const triangleRatio = 0.2928932188134525;
+      const radius = metersToRun * 0.8 * triangleRatio; //.623
+      const angle = Math.random() * 360;
+      const angleForSecondPoint = angle - 90;
+      const firstPoint = computeDestinationPoint(
+        { latitude: startingLat, longitude: startingLong },
+        radius,
+        angle
+      );
+      const secondPoint = computeDestinationPoint(
+        { latitude: startingLat, longitude: startingLong },
+        radius,
+        angleForSecondPoint
+      );
+
+      return [firstPoint, secondPoint];
+    };
+
+    const [waypoint1, waypoint2] = getRandomPointsInRadius(
+      this.state.randRouteStartLat,
+      this.state.randRouteStartLong,
+      this.state.randRoutePrefMiles
+    );
+
+
     function getRoute(e, state, destination) {
       const {map} = state
       console.log('I ran!')
@@ -86,6 +119,14 @@ export default class HomeMap extends Component {
         -73.958582 +
         ',' +
         40.676386 +
+        ';' +
+        -73.943153 +
+        ',' + 
+        40.675687 +
+        ';' + 
+        state.lng +
+        ',' + 
+        state.lat +
         '?steps=true&geometries=geojson&access_token=' +
         mapboxgl.accessToken
 
