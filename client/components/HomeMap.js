@@ -142,52 +142,6 @@ export default class HomeMap extends Component {
       req.send()
     }
     getRoute(e, state, destination)
-
-    // const end = {
-    //   type: 'FeatureCollection',
-    //   features: [
-    //     {
-    //       type: 'Feature',
-    //       properties: {},
-    //       geometry: {
-    //         type: 'Point',
-    //         coordinates: coords
-    //       }
-    //     }
-    //   ]
-    // }
-
-    // map.on('click', e => {
-    //   if (this.state.destination)
-    //     this.setState({origin: e.lngLat, destination: ''})
-    //   if (this.state.origin) this.setState({destination: e.lngLat})
-    //   else this.setState({origin: e.lngLat})
-    //   console.log('the state is', this.state)
-    //   let coordsObj = e.lngLat
-    //   //   canvas.style.cursor = '';
-    //   let coords = Object.keys(coordsObj).map(function(key) {
-    //     return coordsObj[key]
-    //   })
-    //   const end = {
-    //     type: 'FeatureCollection',
-    //     features: [
-    //       {
-    //         type: 'Feature',
-    //         properties: {},
-    //         geometry: {
-    //           type: 'Point',
-    //           coordinates: coords
-    //         }
-    //       }
-    //     ]
-    //   }
-    //   if (map.getLayer('end')) {
-    //     map.getSource('end').setData(end)
-    //   } else {
-
-    //   }
-    //   getRoute(coords)
-    // })
   }
 
   render() {
