@@ -1,26 +1,32 @@
-import React from 'react';
+import React from 'react'
 import PlacesAutocomplete, {
   geocodeByAddress,
-  getLatLng,
-} from 'react-places-autocomplete';
- 
+  getLatLng
+} from 'react-places-autocomplete'
+
 export default class LocationSearchInput extends React.Component {
   constructor(props) {
-    super(props);
-    this.state = { address: '' };
+    super(props)
+    this.state = {
+      address: '',
+      latLng: ''
+    }
   }
- 
+
   handleChange = address => {
-    this.setState({ address });
-  };
- 
+    this.setState({address})
+  }
+
   handleSelect = address => {
     geocodeByAddress(address)
       .then(results => getLatLng(results[0]))
-      .then(latLng => console.log('Success', latLng))
-      .catch(error => console.error('Error', error));
-  };
- 
+      .then(latLng => {
+        this.props.changeLtLng(latLng.lng, latLng.lat)
+        this.setState({latLng, address})
+      })
+      .catch(error => console.error('Error', error))
+  }
+
   render() {
     return (
       <PlacesAutocomplete
@@ -28,12 +34,12 @@ export default class LocationSearchInput extends React.Component {
         onChange={this.handleChange}
         onSelect={this.handleSelect}
       >
-        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+        {({getInputProps, suggestions, getSuggestionItemProps, loading}) => (
           <div>
             <input
               {...getInputProps({
                 placeholder: 'Search Places ...',
-                className: 'location-search-input',
+                className: 'location-search-input'
               })}
             />
             <div className="autocomplete-dropdown-container">
@@ -41,26 +47,26 @@ export default class LocationSearchInput extends React.Component {
               {suggestions.map(suggestion => {
                 const className = suggestion.active
                   ? 'suggestion-item--active'
-                  : 'suggestion-item';
+                  : 'suggestion-item'
                 // inline style for demonstration purpose
                 const style = suggestion.active
-                  ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-                  : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                  ? {backgroundColor: '#fafafa', cursor: 'pointer'}
+                  : {backgroundColor: '#ffffff', cursor: 'pointer'}
                 return (
                   <div
                     {...getSuggestionItemProps(suggestion, {
                       className,
-                      style,
+                      style
                     })}
                   >
                     <span>{suggestion.description}</span>
                   </div>
-                );
+                )
               })}
             </div>
           </div>
         )}
       </PlacesAutocomplete>
-    );
+    )
   }
 }

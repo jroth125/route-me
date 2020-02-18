@@ -1,10 +1,11 @@
 import React, {Component} from 'react'
 import {LoadScript, GoogleMap, fitBounds} from '@react-google-maps/api'
-import mapboxgl from 'mapbox-gl'
+import mapboxgl, {Marker} from 'mapbox-gl'
+import uniqid from 'uniqid'
 import axios from 'axios'
 import '../../secrets'
 
-import GooglePlacesAutocomplete from './GooglePlacesAutocomplete'
+import PlacesAutocomplete from './PlacesAutocomplete'
 
 mapboxgl.accessToken = process.env.MAPBOX
 // create a function to make a directions request
@@ -13,24 +14,27 @@ export default class HomeMap extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      lng: -122.657888,
-      lat: 45.5247888,
+      lng: -73.952793,
+      lat: 40.672555,
       zoom: 15,
       origin: '',
       destination: '',
-      prefMiles: 0
+      prefMiles: 3,
+      map: {},
+      homeMarker: ''
     }
     this.plus = this.plus.bind(this)
     this.minus = this.plus.bind(this)
+    this.changeLtLng = this.changeLtLng.bind(this)
   }
   async componentDidMount() {
-    const origin = this.state.origin
     const map = new mapboxgl.Map({
       container: this.mapContainer,
       style: 'mapbox://styles/mapbox/streets-v11',
       center: [this.state.lng, this.state.lat],
       zoom: this.state.zoom
     })
+
     map.on('move', () => {
       this.setState({
         lng: map.getCenter().lng.toFixed(4),
@@ -39,11 +43,13 @@ export default class HomeMap extends Component {
       })
     })
 
-    const start = [-122.662323, 45.523751]
+    this.setState({map})
+
+    const start = [-73.952793, 40.672555]
     map.on('load', function() {
       // make an initial directions request that
       // starts and ends at the same location
-      getRoute(start)
+      // getRoute(start)
 
       // Add starting point to the map
       map.addLayer({
@@ -73,16 +79,16 @@ export default class HomeMap extends Component {
       // this is where the code from the next step will go
     })
 
-    function getRoute(end) {
+    const getRoute = (startLat, startLng, map) => {
       // make a directions request using cycling profile
       // an arbitrary start will always be the same
       // only the end or destination will change
-      const start = [-122.662323, 45.523751]
+      console.log('start is', this.state.lng, this.state.lat)
       const url =
         'https://api.mapbox.com/directions/v5/mapbox/cycling/' +
-        start[0] +
+        this.state.lng +
         ',' +
-        start[1] +
+        this.state.lat +
         ';' +
         end[0] +
         ',' +
@@ -107,11 +113,13 @@ export default class HomeMap extends Component {
           }
         }
         // if the route already exists on the map, reset it using setData
-        if (map.getSource('route')) {
-          map.getSource('route').setData(geojson)
-        } else {
+        if (this.state.map.getSource('route')) {
+          this.state.map.getSource('route').setData(geojson)
+        } 
+        
+        else {
           // otherwise, make a new request
-          map.addLayer({
+          this.state.map.addLayer({
             id: 'route',
             type: 'line',
             source: {
@@ -203,18 +211,42 @@ export default class HomeMap extends Component {
   }
 
   minus(e) {
-      e.preventDefault()
-      this.setState({prefMiles: -1 + this.state.prefMiles})
-      console.log('im in the minus')
+    e.preventDefault()
+    this.setState({prefMiles: -1 + this.state.prefMiles})
+    console.log('im in the minus')
   }
 
   plus(e) {
-      e.preventDefault()
-      this.setState({prefMiles: this.state.prefMiles + 1})
+    e.preventDefault()
+    this.setState({prefMiles: this.state.prefMiles + 1})
+  }
+
+  changeLtLng(lng, lat) {
+    if (this.state.homeMarker) {
+        this.state.homeMarker.remove()
+    }
+    const homeMarker = new Marker()
+    .setLngLat([lng, lat])
+    .addTo(this.state.map)
+
+    this.setState({lng, lat, homeMarker})
+
+    this.state.map.flyTo({
+      center: [
+        lng,
+        lat
+      ],
+      minZoom: 3,
+      essential: true // this animation is considered essential with respect to prefers-reduced-motion
+      });
+  }
+
+  createRoute() {
+    
   }
 
   render() {
-      const miles = this.state.prefMiles
+    const miles = this.state.prefMiles
     return (
       <div>
         <div className="map-container">
@@ -228,12 +260,20 @@ export default class HomeMap extends Component {
           className="mapContainer mapChild"
         />
         <div className="mapChild" id="instructions">
+          <PlacesAutocomplete changeLtLng={this.changeLtLng} />
           <form>
             <span>{this.state.prefMiles}</span>
-            <button type="submit">Submit</button>
+            <button type="submit">Find route!</button>
           </form>
           <button onClick={this.plus}>+</button>
-          <button onClick={(e) => {this.setState({prefMiles: miles - 1})}}>-</button>
+          <button
+            onClick={e => {
+              this.setState({prefMiles: miles - 1})
+            }}
+            disabled={this.state.prefMiles === 1 ? true : false}
+          >
+            -
+          </button>
         </div>
       </div>
     )
