@@ -195,9 +195,6 @@ export default class HomeMap extends Component {
     //   getRoute(coords)
     // })
 
-    // const response = await axios.get("https://api.mapbox.com/directions/v5/mapbox/cycling/-122.42,37.78;-77.03,38.91?access_token=pk.eyJ1IjoianJvdGhlbmJlcmcxMjUiLCJhIjoiY2p1d3VpZG50MGdjcDQzbXdiNmtlcWFueSJ9.OFDtycGpIKFrFQN2-dP35A")
-    // console.log('It is...',response)
-
     // await getRoute([-122.677738,45.522458])
   }
 
