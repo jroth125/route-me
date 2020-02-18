@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {LoadScript, GoogleMap, fitBounds} from '@react-google-maps/api'
 import mapboxgl, {Marker} from 'mapbox-gl'
 import { getDistance, computeDestinationPoint } from 'geolib';
+import {getRandomPointsInRadius, milesToMeters} from '../../utils'
 import uniqid from 'uniqid'
 import axios from 'axios'
 import '../../secrets'
@@ -70,37 +71,13 @@ export default class HomeMap extends Component {
 
   createRoute(e, state, destination) {
     e.preventDefault()
-    console.log('I ran!fsdfsd')
+
+    const waypoints = getRandomPointsInRadius(state.lat, state.lng, state.prefMiles)
+    console.log('waypoints!!!!',waypoints)
 
     const milesToMeters = miles => {
       return miles / 0.00062137;
     };
-
-    const getRandomPointsInRadius = (startingLat, startingLong, milesToRun) => {
-      const metersToRun = milesToMeters(milesToRun);
-      const triangleRatio = 0.2928932188134525;
-      const radius = metersToRun * 0.8 * triangleRatio; //.623
-      const angle = Math.random() * 360;
-      const angleForSecondPoint = angle - 90;
-      const firstPoint = computeDestinationPoint(
-        { latitude: startingLat, longitude: startingLong },
-        radius,
-        angle
-      );
-      const secondPoint = computeDestinationPoint(
-        { latitude: startingLat, longitude: startingLong },
-        radius,
-        angleForSecondPoint
-      );
-
-      return [firstPoint, secondPoint];
-    };
-
-    const [waypoint1, waypoint2] = getRandomPointsInRadius(
-      this.state.randRouteStartLat,
-      this.state.randRouteStartLong,
-      this.state.randRoutePrefMiles
-    );
 
 
     function getRoute(e, state, destination) {
@@ -116,13 +93,13 @@ export default class HomeMap extends Component {
         ',' +
         state.lat +
         ';' +
-        -73.958582 +
+        waypoints[0].longitude +
         ',' +
-        40.676386 +
+        waypoints[0].latitude +
         ';' +
-        -73.943153 +
+        waypoints[1].longitude +
         ',' + 
-        40.675687 +
+        waypoints[1].latitude +
         ';' + 
         state.lng +
         ',' + 
@@ -184,6 +161,39 @@ export default class HomeMap extends Component {
     }
     getRoute(e, state, destination)
   }
+
+  // generateRandomRoute() {
+  //   const milesToMeters = miles => {
+  //     return miles / 0.00062137;
+  //   };
+
+  //   const getRandomPointsInRadius = (startingLat, startingLong, milesToRun) => {
+  //     const metersToRun = milesToMeters(milesToRun);
+  //     const triangleRatio = 0.2928932188134525;
+  //     const radius = metersToRun * 0.8 * triangleRatio; //.623
+  //     const angle = Math.random() * 360;
+  //     const angleForSecondPoint = angle - 90;
+  //     const firstPoint = computeDestinationPoint(
+  //       { latitude: startingLat, longitude: startingLong },
+  //       radius,
+  //       angle
+  //     );
+  //     const secondPoint = computeDestinationPoint(
+  //       { latitude: startingLat, longitude: startingLong },
+  //       radius,
+  //       angleForSecondPoint
+  //     );
+
+  //     return [firstPoint, secondPoint];
+  //   };
+
+  //   const randRouteDestPoints = getRandomPointsInRadius(
+  //     this.state.randRouteStartLat,
+  //     this.state.randRouteStartLong,
+  //     this.state.randRoutePrefMiles
+  //   );
+  //   this.setState({ randRouteDestPoints });
+  // }
 
   render() {
     const miles = this.state.prefMiles
