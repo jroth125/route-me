@@ -32,16 +32,18 @@ const getRandomPointsInRadius = (startingLat, startingLong, milesToRun) => {
       radius / 2,
       angleForCentroidPoint
     )
-    onWater = isInWater(firstPoint, secondPoint)
+    isInWater(firstPoint, secondPoint)
+    onWater = false
   }
 
   return [firstPoint, secondPoint, centroidPoint]
 }
 
-const isInWater = (point1, point2) => {
-    const res1 = axios.get(`https://api.onwater.io/api/v1/results/${point1.latitude},${point1.longitude}?access_token=${process.env.ON_WATER}`)
-    const res2 =  axios.get(`https://api.onwater.io/api/v1/results/${point2.latitude},${point2.longitude}?access_token=${process.env.ON_WATER}`)
-    return res1 && res2
+const isInWater = async (point1, point2) => {
+    const res1 = await axios.get(`https://api.onwater.io/api/v1/results/${point1.latitude},${point1.longitude}?access_token=${process.env.ON_WATER}`)
+    const res2 = await axios.get(`https://api.onwater.io/api/v1/results/${point2.latitude},${point2.longitude}?access_token=${process.env.ON_WATER}`)
+    console.log('These responses are...', res2)
+    return res1.data.water || res2.data.water
 }
 
 module.exports = {getRandomPointsInRadius, milesToMeters}
