@@ -23,7 +23,8 @@ export default class HomeMap extends Component {
       destination: '',
       prefMiles: 3,
       map: {},
-      homeMarker: ''
+      homeMarker: '',
+      routeMiles: 0,
     }
     this.plus = this.plus.bind(this)
     this.minus = this.plus.bind(this)
@@ -69,20 +70,15 @@ export default class HomeMap extends Component {
     })
   }
 
-  createRoute(e, state, destination) {
+  async createRoute(e, state, destination) {
     e.preventDefault()
 
-    const waypoints = getRandomPointsInRadius(state.lat, state.lng, state.prefMiles)
-    console.log('waypoints!!!!',waypoints)
 
+    const waypoints = getRandomPointsInRadius(state.lat, state.lng, state.prefMiles)
     const milesToMeters = miles => {
       return miles / 0.00062137;
     };
-
-
-    function getRoute(e, state, destination) {
       const {map} = state
-      console.log('I ran!')
       // make a directions request using cycling profile
       // an arbitrary start will always be the same
       // only the end or destination will change
@@ -110,11 +106,14 @@ export default class HomeMap extends Component {
       // make an XHR request https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
       const req = new XMLHttpRequest()
       req.open('GET', url, true)
-      req.onload = function() {
+      req.onload = () => {
         let json = JSON.parse(req.response)
         let data = json.routes[0]
         let route = data.geometry.coordinates
-        console.log('this is the route', route)
+        console.log('this is the data', data)
+        let miles = data.distance * 0.00062137
+        console.log('these are the miles!!!!:', data.distance * 0.00062137, miles / state.prefMiles)
+        this.setState({routeMiles: miles})
         let geojson = {
           type: 'Feature',
           properties: {},
@@ -158,42 +157,14 @@ export default class HomeMap extends Component {
         // add turn instructions here at the end
       }
       req.send()
-    }
-    getRoute(e, state, destination)
+      map.flyTo({
+        center: [waypoints[2].longitude, waypoints[2].latitude],
+        zoom: state.prefMiles > 3 ? 13 : 15,
+        essential: true, // this animation is considered essential with respect to prefers-reduced-motion
+      })
   }
 
-  // generateRandomRoute() {
-  //   const milesToMeters = miles => {
-  //     return miles / 0.00062137;
-  //   };
 
-  //   const getRandomPointsInRadius = (startingLat, startingLong, milesToRun) => {
-  //     const metersToRun = milesToMeters(milesToRun);
-  //     const triangleRatio = 0.2928932188134525;
-  //     const radius = metersToRun * 0.8 * triangleRatio; //.623
-  //     const angle = Math.random() * 360;
-  //     const angleForSecondPoint = angle - 90;
-  //     const firstPoint = computeDestinationPoint(
-  //       { latitude: startingLat, longitude: startingLong },
-  //       radius,
-  //       angle
-  //     );
-  //     const secondPoint = computeDestinationPoint(
-  //       { latitude: startingLat, longitude: startingLong },
-  //       radius,
-  //       angleForSecondPoint
-  //     );
-
-  //     return [firstPoint, secondPoint];
-  //   };
-
-  //   const randRouteDestPoints = getRandomPointsInRadius(
-  //     this.state.randRouteStartLat,
-  //     this.state.randRouteStartLong,
-  //     this.state.randRoutePrefMiles
-  //   );
-  //   this.setState({ randRouteDestPoints });
-  // }
 
   render() {
     const miles = this.state.prefMiles
@@ -229,6 +200,9 @@ export default class HomeMap extends Component {
           >
             -
           </button>
+          <div>
+          <p> This run is: {this.state.routeMiles}</p>
+          </div>
         </div>
       </div>
     )

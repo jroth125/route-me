@@ -10,6 +10,7 @@ const {computeDestinationPoint} = require('geolib')
     const radius = metersToRun * 0.8 * triangleRatio; //.623
     const angle = Math.random() * 360;
     const angleForSecondPoint = angle - 90;
+    const angleForCentroidPoint = angle - 45
     const firstPoint = computeDestinationPoint(
       { latitude: startingLat, longitude: startingLong },
       radius,
@@ -20,9 +21,14 @@ const {computeDestinationPoint} = require('geolib')
       radius,
       angleForSecondPoint
     );
+
+    const centroidPoint = computeDestinationPoint(
+        { latitude: startingLat, longitude: startingLong },
+        radius/2,
+        angleForCentroidPoint
+      );
     
-    console.log('the generator was given ', startingLat, startingLong, milesToRun, 'and had produced', firstPoint, secondPoint )
-    return [firstPoint, secondPoint];
+    return [firstPoint, secondPoint, centroidPoint];
   };
 
 module.exports = {getRandomPointsInRadius, milesToMeters}
