@@ -20,4 +20,14 @@ router.get('/:runId', async (req, res, next) => {
     }
 })
 
+router.post('/', (req, res, next) => {
+    try {
+        const {country, coords, city, state} = req.body
+        const newRun = await Route.create({country, coords, city, state})
+        if (newRun) res.send(newRun)
+        else res.status(404).send('not created')
+    } catch (error) {
+        
+    }
+})
 module.exports = router

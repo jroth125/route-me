@@ -74,7 +74,7 @@ export default class HomeMap extends Component {
     e.preventDefault()
 
 
-    const waypoints = getRandomPointsInRadius(state.lat, state.lng, state.prefMiles)
+    const waypoints = await getRandomPointsInRadius(state.lat, state.lng, state.prefMiles)
     const milesToMeters = miles => {
       return miles / 0.00062137;
     };
