@@ -27,7 +27,7 @@ router.post('/', (req, res, next) => {
         if (newRun) res.send(newRun)
         else res.status(404).send('not created')
     } catch (error) {
-        
+        next(error)
     }
 })
 module.exports = router
