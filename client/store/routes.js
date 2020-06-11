@@ -31,7 +31,6 @@ export const getCurrentRouteThunk = id => {
 export const createNewRouteThunk = (coords, state, city, country) => {
   return async dispatch => {
     try {
-      console.log("coords are", coords)
       const {data} = Axios.post('/api/routes/', {coords, state, city, country})
       dispatch(createNewRoute(data))
     } catch (error) {
