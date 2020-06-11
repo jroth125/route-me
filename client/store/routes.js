@@ -1,5 +1,4 @@
 import Axios from 'axios'
-import { json } from 'express'
 
 const CREATE_NEW_ROUTE = 'CREATE_NEW_ROUTE'
 const GET_CURRENT_ROUTE = 'GET_CURRENT_ROUTE'
@@ -32,6 +31,7 @@ export const getCurrentRouteThunk = id => {
 export const createNewRouteThunk = (coords, state, city, country) => {
   return async dispatch => {
     try {
+      console.log("coords are", coords)
       const {data} = Axios.post('/api/routes/', {coords, state, city, country})
       dispatch(createNewRoute(data))
     } catch (error) {

@@ -22,6 +22,7 @@ router.get('/:runId', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
     try {
+        console.log("req.body is---------------->", req.body)
         const {country, coords, city, state} = req.body
         const newRun = await Route.create({country, coords, city, state})
         if (newRun) res.send(newRun)

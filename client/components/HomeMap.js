@@ -52,7 +52,6 @@ class HomeMap extends Component {
   minus(e) {
     e.preventDefault()
     this.setState({prefMiles: -1 + this.state.prefMiles})
-    console.log('im in the minus')
   }
 
   plus(e) {
@@ -60,7 +59,7 @@ class HomeMap extends Component {
     this.setState({prefMiles: this.state.prefMiles + 1})
   }
 
-  changeLtLng(lng, lat, state, city, country) {
+  changeLtLng(lng, lat, city, state, country) {
     if (this.state.homeMarker) {
       this.state.homeMarker.remove()
     }
@@ -89,7 +88,6 @@ class HomeMap extends Component {
     // make a directions request using cycling profile
     // an arbitrary start will always be the same
     // only the end or destination will change
-    console.log('start is', state.lng, state.lng)
     const url =
       'https://api.mapbox.com/directions/v5/mapbox/walking/' +
       state.lng +
@@ -117,7 +115,6 @@ class HomeMap extends Component {
       let json = JSON.parse(req.response)
       let data = json.routes[0]
       let route = data.geometry.coordinates
-      console.log('this is the data', data)
       let miles = data.distance * 0.00062137
       console.log(
         'these are the miles!!!!:',
@@ -137,7 +134,6 @@ class HomeMap extends Component {
       // if the route already exists on the map, reset it using setData
       if (map.getSource('route')) {
         map.getSource('route').setData(geojson)
-        console.log('geojson is>>', geojson)
       } else {
         console.log('lol there is none')
         // otherwise, make a new request
@@ -198,7 +194,6 @@ class HomeMap extends Component {
             <button
               type="submit"
               onClick={(e) => {
-                console.log('I am in the submit event')
                 this.createRoute(e, this.state)
                 console.log('the state issss>>', this.state)
               }}
@@ -208,7 +203,12 @@ class HomeMap extends Component {
           </form>
           <div>
           <button
-          onClick={this.props.createNewRoute(this.state.curRoute, )}
+          onClick={() => {
+            const stringifiedRoute = JSON.stringify(this.state.curRoute)
+            const {state, city, country} = this.state
+            console.log("coords are these---->", stringifiedRoute, city, state, country)
+            this.props.createNewRoute(stringifiedRoute, this.state.state, this.state.city, this.state.country)
+          }}
           >Save route</button>
           </div>
           <button onClick={this.plus}>+</button>
@@ -230,7 +230,9 @@ class HomeMap extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  createNewRoute: (coords, state, city, country) => dispatch(createNewRouteThunk(coords, state, city, country))
+  createNewRoute: (coords, state, city, country) => {
+    console.log("just fired!!!!!!!)(*&)(&*(*&")
+    dispatch(createNewRouteThunk(coords, state, city, country))}
 })
 
 export default connect(null, mapDispatchToProps)(HomeMap)
