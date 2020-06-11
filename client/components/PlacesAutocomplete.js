@@ -18,10 +18,12 @@ export default class LocationSearchInput extends React.Component {
   }
 
   handleSelect = address => {
+    console.log('address is...',address)
+    const [streetAddress, city, state, country] = address.split(', ')
     geocodeByAddress(address)
       .then(results => getLatLng(results[0]))
       .then(latLng => {
-        this.props.changeLtLng(latLng.lng, latLng.lat)
+        this.props.changeLtLng(latLng.lng, latLng.lat, city, state, country)
         this.setState({latLng, address})
       })
       .catch(error => console.error('Error', error))

@@ -1,4 +1,5 @@
 import Axios from 'axios'
+import { json } from 'express'
 
 const CREATE_NEW_ROUTE = 'CREATE_NEW_ROUTE'
 const GET_CURRENT_ROUTE = 'GET_CURRENT_ROUTE'
@@ -39,7 +40,7 @@ export const createNewRouteThunk = (coords, state, city, country) => {
   }
 }
 
-export default routeReducer = (state = {}, action) => {
+export const routeReducer = (state = {routes: [], curRoute: {}}, action) => {
   switch (action.type) {
     case CREATE_NEW_ROUTE:
       return {...state, routes: [...state.routes, action.route]}
