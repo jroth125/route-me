@@ -72,8 +72,6 @@ export default class HomeMap extends Component {
 
   async createRoute(e, state, destination) {
     e.preventDefault()
-
-
     const waypoints = await getRandomPointsInRadius(state.lat, state.lng, state.prefMiles)
     const milesToMeters = miles => {
       return miles / 0.00062137;
@@ -153,6 +151,7 @@ export default class HomeMap extends Component {
               'line-opacity': 0.75
             }
           })
+          map.getSource('route').setData(geojson)
         }
         // add turn instructions here at the end
       }
@@ -186,7 +185,10 @@ export default class HomeMap extends Component {
             <span>{this.state.prefMiles}</span>
             <button
               type="submit"
-              onClick={e => this.createRoute(e, this.state)}
+              onClick={e => {
+                console.log("I am in the submit event")
+                this.createRoute(e, this.state)
+              }}
             >
               Find route!
             </button>

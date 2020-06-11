@@ -11,7 +11,6 @@ const getRandomPointsInRadius = async (
   startingLong,
   milesToRun
 ) => {
-  let onWater = true
   let firstPoint, secondPoint, centroidPoint
   const metersToRun = milesToMeters(milesToRun)
   const triangleRatio = 0.2928932188134525
