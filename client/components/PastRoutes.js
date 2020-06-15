@@ -18,7 +18,17 @@ class PastRoutes extends Component {
         console.log('the user id is', this.props.userId)
         return (
         <div>
-            <h1>DO YOU SEE ME!</h1>
+            <table>
+                {this.props.routes ? this.props.routes.map((route, idx) => {
+                    return (
+                    <tr key={route.id}>
+                        <td>{route.city}</td>
+                        <td>{route.state}</td>
+                        <td>{route.createdAt}</td>
+                    </tr>
+                    )
+                }) : null}
+            </table>
         </div>
         )
     }
