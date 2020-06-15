@@ -5,6 +5,7 @@ import {getDistance, computeDestinationPoint} from 'geolib'
 import {getRandomPointsInRadius, milesToMeters} from '../../utils'
 import {connect} from 'react-redux'
 import {createNewRouteThunk} from '../store/routes'
+import {me} from '../store/user'
 import uniqid from 'uniqid'
 import axios from 'axios'
 import '../../secrets'
@@ -37,6 +38,7 @@ class HomeMap extends Component {
     this.changeLtLng = this.changeLtLng.bind(this)
   }
   async componentDidMount() {
+    this.props.getUser()
     const map = new mapboxgl.Map({
       container: this.mapContainer,
       style: 'mapbox://styles/mapbox/streets-v11',
@@ -206,8 +208,8 @@ class HomeMap extends Component {
           onClick={() => {
             const stringifiedRoute = JSON.stringify(this.state.curRoute)
             const {state, city, country} = this.state
-            console.log("coords are these---->", stringifiedRoute, city, state, country)
-            this.props.createNewRoute(stringifiedRoute, this.state.state, this.state.city, this.state.country)
+            console.log('the props are', this.props)
+            this.props.createNewRoute(stringifiedRoute, this.state.state, this.state.city, this.state.country, this.props.userId)
           }}
           >Save route</button>
           </div>
@@ -229,10 +231,12 @@ class HomeMap extends Component {
   }
 }
 
+const mapStateToProps = (state) => ({
+  userId: state.user.id
+})
 const mapDispatchToProps = (dispatch) => ({
-  createNewRoute: (coords, state, city, country) => {
-    console.log("just fired!!!!!!!)(*&)(&*(*&")
-    dispatch(createNewRouteThunk(coords, state, city, country))}
+  createNewRoute: (coords, state, city, country, userId) => dispatch(createNewRouteThunk(coords, state, city, country, userId)),
+  getUser: () => dispatch(me())
 })
 
-export default connect(null, mapDispatchToProps)(HomeMap)
+export default connect(mapStateToProps, mapDispatchToProps)(HomeMap)

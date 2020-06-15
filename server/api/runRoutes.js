@@ -1,9 +1,10 @@
 const router = require('express').Router()
-const {Route} = require('../db/models')
+const {Route, User} = require('../db/models')
 
 //eventually will want to add query params here to get completed and non-complete run routes
 router.get('/', async (req, res, next) => {
     try {
+        console.log('------------>hello')
         const allRunRoutes = await Route.getAllRoutes(req.user.id)
         res.status(200).send(allRunRoutes)
     } catch (error) {
@@ -23,8 +24,8 @@ router.get('/:runId', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
     try {
         console.log("req.body is---------------->", req.body)
-        const {country, coords, city, state} = req.body
-        const newRun = await Route.create({country, coords, city, state})
+        const {country, coords, city, state, userId} = req.body
+        const newRun = await Route.create({country, coords, city, state, userId})
         if (newRun) res.send(newRun)
         else res.status(404).send('not created')
     } catch (error) {

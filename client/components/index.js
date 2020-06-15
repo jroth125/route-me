@@ -5,5 +5,6 @@
  */
 export {default as Navbar} from './navbar'
 export {default as HomeMap} from './HomeMap'
+export {default as PastRouteMap} from './PastRouteMap'
 export {default as UserHome} from './user-home'
 export {Login, Signup} from './auth-form'
