@@ -4,8 +4,9 @@ const {Route, User} = require('../db/models')
 //eventually will want to add query params here to get completed and non-complete run routes
 router.get('/', async (req, res, next) => {
     try {
-        console.log('------------>hello')
-        const allRunRoutes = await Route.getAllRoutes(req.user.id)
+        console.log('------------>id', id)
+        const allRunRoutes = await Route.getAllRoutes(req.id)
+        console.log('runs are', allRunRoutes)
         res.status(200).send(allRunRoutes)
     } catch (error) {
         next(error)
