@@ -10,7 +10,7 @@ class PastRoutes extends Component {
         this.state = {}
     }
     componentDidMount() {
-        this.props.getUserId()
+        console.log('about to send this up', this.props.userId)
         this.props.getRoutes(this.props.userId)
     }
 

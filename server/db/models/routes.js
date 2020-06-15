@@ -29,6 +29,7 @@ const Route = db.define('route', {
 })
 
 Route.getAllRoutes = function(userId) {
+    console.log('user id is----------><><><>', userId)
     const allRunRoutes = Route.findAll({
         where: {
             userId

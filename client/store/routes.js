@@ -48,7 +48,7 @@ export const createNewRouteThunk = (coords, state, city, country, userId) => {
 export const getUserRoutesThunk = id => {
   return async dispatch => {
     try {
-      const {data} = Axios.get(`/api/routes/`, {id})
+      const {data} = await Axios.get(`/api/routes/allroutes/${id}`)
       dispatch(getAllUserRoutes(data))
     } catch (error) {
       console.error('getUserRoutesThunk did not go through', error)
