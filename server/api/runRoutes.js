@@ -25,10 +25,11 @@ router.get('/allroutes/:userId', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
     try {
-        console.log("req.body is---------------->", req.body)
-        const {country, coords, city, state, userId} = req.body
-        const newRun = await Route.create({country, coords, city, state, userId})
-        if (newRun) res.send(newRun)
+        const {country, coords, city, state, userId, name} = req.body
+        const newRun = await Route.create({country, name, coords, city, state, userId})
+        if (newRun) {
+            res.send(newRun)
+        }
         else res.status(404).send('not created')
     } catch (error) {
         next(error)

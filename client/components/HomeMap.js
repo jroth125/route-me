@@ -25,6 +25,7 @@ class HomeMap extends Component {
       origin: '',
       destination: '',
       prefMiles: 3,
+      runName: '',
       map: {},
       homeMarker: '',
       routeMiles: 0,
@@ -36,6 +37,7 @@ class HomeMap extends Component {
     this.plus = this.plus.bind(this)
     this.minus = this.plus.bind(this)
     this.changeLtLng = this.changeLtLng.bind(this)
+    this.handleChange = this.handleChange.bind(this)
   }
   async componentDidMount() {
     this.props.getUser()
@@ -59,6 +61,10 @@ class HomeMap extends Component {
   plus(e) {
     e.preventDefault()
     this.setState({prefMiles: this.state.prefMiles + 1})
+  }
+
+  handleChange(e) {
+   this.setState({[e.target.name]: e.target.value})
   }
 
   changeLtLng(lng, lat, city, state, country) {
@@ -202,14 +208,15 @@ class HomeMap extends Component {
             >
               Find route!
             </button>
+            <label htmlFor="runName">Name your run:</label>
+            <input type="text" name="runName" onChange={(e) => this.handleChange(e)}/>
           </form>
           <div>
           <button
           onClick={() => {
             const stringifiedRoute = JSON.stringify(this.state.curRoute)
             const {state, city, country} = this.state
-            console.log('the props are', this.props)
-            this.props.createNewRoute(stringifiedRoute, this.state.state, this.state.city, this.state.country, this.props.userId)
+            this.props.createNewRoute(stringifiedRoute, this.state.runName, this.state.state, this.state.city, this.state.country, this.props.userId)
           }}
           >Save route</button>
           </div>
@@ -235,7 +242,7 @@ const mapStateToProps = (state) => ({
   userId: state.user.id
 })
 const mapDispatchToProps = (dispatch) => ({
-  createNewRoute: (coords, state, city, country, userId) => dispatch(createNewRouteThunk(coords, state, city, country, userId)),
+  createNewRoute: (coords, name, state, city, country, userId) => dispatch(createNewRouteThunk(coords, name, state, city, country, userId)),
   getUser: () => dispatch(me())
 })
 

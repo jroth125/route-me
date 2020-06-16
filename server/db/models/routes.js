@@ -6,6 +6,10 @@ const Route = db.define('route', {
         type: Sequelize.TEXT,
         allowNull: false
     },
+    name: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
     city: {
         type: Sequelize.STRING,
         allowNull: true

@@ -33,11 +33,10 @@ export const getCurrentRouteThunk = id => {
   }
 }
 
-export const createNewRouteThunk = (coords, state, city, country, userId) => {
+export const createNewRouteThunk = (coords, name, state, city, country, userId) => {
   return async dispatch => {
     try {
-      console.log('USER ID IS ----> ', userId)
-      const {data} = Axios.post('/api/routes/', {coords, state, city, country, userId})
+      const {data} = Axios.post('/api/routes/', {coords, name, state, city, country, userId})
       dispatch(createNewRoute(data))
     } catch (error) {
       console.error(error)
@@ -56,7 +55,7 @@ export const getUserRoutesThunk = id => {
   }
 }
 
-export const routeReducer = (state = {routes: [], curRoute: {}}, action) => {
+export const routeReducer = (state = {allRoutes: [], curRoute: {}}, action) => {
   switch (action.type) {
     case CREATE_NEW_ROUTE:
       return {...state, allRoutes: [...state.allRoutes, action.route]}
