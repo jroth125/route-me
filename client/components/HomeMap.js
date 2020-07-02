@@ -178,7 +178,7 @@ class HomeMap extends Component {
     req.send()
     map.flyTo({
       center: [waypoints[2].longitude, waypoints[2].latitude],
-      zoom: state.prefMiles > 3 ? 13 : 15,
+      zoom: state.prefMiles > 3 ? 13 : 14,
       essential: true, // this animation is considered essential with respect to prefers-reduced-motion
     })
     this.setState({routeOnScreen: true})
