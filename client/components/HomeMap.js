@@ -143,6 +143,7 @@ class HomeMap extends Component {
       // if the route already exists on the map, reset it using setData
       if (map.getSource('route')) {
         map.getSource('route').setData(geojson)
+        console.log('GEO IS', geojson)
       } else {
         console.log('lol there is none')
         // otherwise, make a new request

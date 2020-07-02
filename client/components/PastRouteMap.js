@@ -14,16 +14,17 @@ class PastRouteMap extends Component {
   constructor(props) {
     super(props)
     this.state = {
-        curRouteCoords: [],
-        map: {},
-        zoom: 15
+      curRouteCoords: [],
+      map: {},
+      zoom: 15,
+      lng: -73.966645,
+      lat: 40.781358,
     }
   }
 
-  
   async componentDidMount() {
     this.props.getCurRoute(this.props.match.params.routeId)
-    console.log('the curRoute is',this.props.coords)
+    console.log('the curRoute is', this.props.coords)
     const map = new mapboxgl.Map({
       container: this.mapContainer,
       style: 'mapbox://styles/mapbox/streets-v11',
@@ -32,22 +33,48 @@ class PastRouteMap extends Component {
     })
 
     this.setState({map})
-
-    
   }
 
-componentDidUpdate(prevProps, prevState){
-  if (this.props.coords !== prevProps.coords) {
-    console.log("new props:", this.props)
-  } 
-}
+  async componentDidUpdate(prevProps, prevState) {
+    if (this.props.coords !== prevProps.coords) {
+      let {map} = this.state
+      let {coords} = this.props
+      let mid = Math.floor(this.props.coords.length / 2)
+      map.on('load', () => {
+        map.addLayer({
+          id: 'route',
+          type: 'line',
+          source: {
+            type: 'geojson',
+            data: {
+              type: 'Feature',
+              properties: {},
+              geometry: {
+                type: 'LineString',
+                coordinates: coords,
+              },
+            },
+          },
+          layout: {
+            'line-join': 'round',
+            'line-cap': 'round',
+          },
+          paint: {
+            'line-color': 'purple',
+            'line-width': 5,
+            'line-opacity': 0.75,
+          },
+        })
+        map.flyTo({center: coords[mid], zoom: 14, essential: false})
+      })
+    }
+  }
 
   render() {
     const miles = this.state.prefMiles
     return (
       <div>
-        <div className="map-container">
-        </div>
+        <div className="map-container"></div>
         <div
           ref={(el) => (this.mapContainer = el)}
           className="mapContainer mapChild"
@@ -57,16 +84,15 @@ componentDidUpdate(prevProps, prevState){
   }
 }
 
-
 const mapStateToProps = (state) => {
-    return {
-        coords: state.routes.curRoute
-    }
+  return {
+    coords: state.routes.curRoute,
+  }
 }
 const mapDispatchToProps = (dispatch) => {
-    return {
-        getCurRoute: (id) => dispatch(getCurrentRouteThunk(id))
-    }
+  return {
+    getCurRoute: (id) => dispatch(getCurrentRouteThunk(id)),
+  }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PastRouteMap)
