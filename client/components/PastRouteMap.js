@@ -23,16 +23,55 @@ class PastRouteMap extends Component {
   }
 
   async componentDidMount() {
-    this.props.getCurRoute(this.props.match.params.routeId)
-    console.log('the curRoute is', this.props.coords)
-    const map = new mapboxgl.Map({
-      container: this.mapContainer,
-      style: 'mapbox://styles/mapbox/streets-v11',
-      center: [-73.966645, 40.781358],
-      zoom: this.state.zoom,
-    })
+    console.log('do we have a cuyr Route? ', this.props.curRoute)
+    if (this.props.curRoute.id) {
+      const rawCoords = this.props.curRoute.coords
+      const coords = JSON.parse(rawCoords)
+      const mid = Math.floor(coords.length / 4)
+      const map = new mapboxgl.Map({
+        container: this.mapContainer,
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: coords[mid],
+        zoom: 13,
+      })
+      map.on('load', () => {
+        map.addLayer({
+          id: 'route',
+          type: 'line',
+          source: {
+            type: 'geojson',
+            data: {
+              type: 'Feature',
+              properties: {},
+              geometry: {
+                type: 'LineString',
+                coordinates: coords,
+              },
+            },
+          },
+          layout: {
+            'line-join': 'round',
+            'line-cap': 'round',
+          },
+          paint: {
+            'line-color': 'purple',
+            'line-width': 5,
+            'line-opacity': 0.75,
+          },
+        })
+      })
+    } else {
+      this.props.getCurRoute(this.props.match.params.routeId)
+      console.log('the curRoute is', this.props.coords)
+      const map = new mapboxgl.Map({
+        container: this.mapContainer,
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [-73.966645, 40.781358],
+        zoom: this.state.zoom,
+      })
 
-    this.setState({map})
+      this.setState({map})
+    }
   }
 
   async componentDidUpdate(prevProps, prevState) {
@@ -87,6 +126,7 @@ class PastRouteMap extends Component {
 const mapStateToProps = (state) => {
   return {
     coords: state.routes.curRoute,
+    curRoute: state.routes.curRoute,
   }
 }
 const mapDispatchToProps = (dispatch) => {

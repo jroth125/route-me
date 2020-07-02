@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
-import {getUserRoutesThunk} from '../store/routes'
+import {getUserRoutesThunk, getCurrentRoute} from '../store/routes'
 import {me} from '../store/user'
 
 class PastRoutes extends Component {
@@ -28,7 +28,7 @@ class PastRoutes extends Component {
                 {this.props.routes ? this.props.routes.map((route, idx) => {
                     return (
                     <tr key={route.id}>
-                        <td><Link to={`/past/${route.id}`}>{route.name}</Link></td>
+                        <td><Link onClick={() => this.props.updateCurrentRoute(route)} to={`/past/${route.id}`}>{route.name}</Link></td>
                         <td>{route.city}</td>
                         <td>{route.state}</td>
                         <td>{route.createdAt}</td>
@@ -49,7 +49,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = dispatch => ({
     getRoutes: (id) => dispatch(getUserRoutesThunk(id)),
-    getUserId: () => dispatch(me())
+    getUserId: () => dispatch(me()),
+    updateCurrentRoute: (route) => dispatch(getCurrentRoute(route))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(PastRoutes)

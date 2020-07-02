@@ -21,6 +21,7 @@ form div {
 }
 
 .mapContainer {
+  margin-top: 140px;
   position: absolute;
   top: 0;
   right: 0;
@@ -45,13 +46,12 @@ form div {
 
 #instructions {
   position: absolute;
-  margin: 20px;
+  margin-top: 140px;
   width: 25%;
-  height: 25%;
+  height: 200px;
   top: 0;
-  bottom: 20%;
   padding: 20px;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.8);
   overflow-y: scroll;
   font-family: sans-serif;
   font-size: 0.8em;

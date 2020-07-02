@@ -4,6 +4,7 @@ const CREATE_NEW_ROUTE = 'CREATE_NEW_ROUTE'
 const GET_CURRENT_ROUTE = 'GET_CURRENT_ROUTE'
 const GET_ALL_USER_ROUTES = "GET_ALL_USER_ROUTES"
 
+
 const createNewRoute = route => {
   return {
     type: CREATE_NEW_ROUTE,
@@ -11,7 +12,7 @@ const createNewRoute = route => {
   }
 }
 
-const getCurrentRoute = route => {
+export const getCurrentRoute = route => {
   return {
     type: GET_CURRENT_ROUTE,
     route
