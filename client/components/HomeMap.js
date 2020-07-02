@@ -32,7 +32,8 @@ class HomeMap extends Component {
       curRoute: [],
       state: '',
       city: '',
-      country: ''
+      country: '',
+      routeOnScreen: false
     }
     this.plus = this.plus.bind(this)
     this.minus = this.plus.bind(this)
@@ -179,6 +180,7 @@ class HomeMap extends Component {
       zoom: state.prefMiles > 3 ? 13 : 15,
       essential: true, // this animation is considered essential with respect to prefers-reduced-motion
     })
+    this.setState({routeOnScreen: true})
   }
 
   render() {
@@ -201,6 +203,7 @@ class HomeMap extends Component {
             <span>{this.state.prefMiles}</span>
             <button
               type="submit"
+
               onClick={(e) => {
                 this.createRoute(e, this.state)
                 console.log('the state issss>>', this.state)
@@ -209,15 +212,17 @@ class HomeMap extends Component {
               Find route!
             </button>
             <label htmlFor="runName">Name your run:</label>
-            <input type="text" name="runName" onChange={(e) => this.handleChange(e)}/>
+            <input type="text" name="runName" value={this.state.runName} disabled={!this.state.routeOnScreen} onChange={(e) => this.handleChange(e)}/>
           </form>
           <div>
           <button
-          onClick={() => {
+          onClick={(e) => {
             const stringifiedRoute = JSON.stringify(this.state.curRoute)
             const {state, city, country} = this.state
             this.props.createNewRoute(stringifiedRoute, this.state.runName, this.state.state, this.state.city, this.state.country, this.props.userId)
+            this.setState({runName: '', routeOnScreen: false})
           }}
+          disabled={!this.state.routeOnScreen || !this.state.runName}
           >Save route</button>
           </div>
           <button onClick={this.plus}>+</button>

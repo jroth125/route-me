@@ -19,9 +19,16 @@ class PastRoutes extends Component {
         return (
         <div>
             <table>
+                <tr>
+                    <td>Name</td>
+                    <td>City</td>
+                    <td>State</td>
+                    <td>Date Created</td>
+                </tr>
                 {this.props.routes ? this.props.routes.map((route, idx) => {
                     return (
                     <tr key={route.id}>
+                        <td><Link to={`/past/${route.id}`}>{route.name}</Link></td>
                         <td>{route.city}</td>
                         <td>{route.state}</td>
                         <td>{route.createdAt}</td>
