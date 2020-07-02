@@ -38,11 +38,8 @@ class PastRouteMap extends Component {
 
 componentDidUpdate(prevProps, prevState){
   if (this.props.coords !== prevProps.coords) {
-    console.log("prevProps:", prevProps.coords)
     console.log("new props:", this.props)
-  } else {
-    console.log("damn")
-  }
+  } 
 }
 
   render() {
