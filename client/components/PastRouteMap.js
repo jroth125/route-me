@@ -27,18 +27,23 @@ class PastRouteMap extends Component {
     const map = new mapboxgl.Map({
       container: this.mapContainer,
       style: 'mapbox://styles/mapbox/streets-v11',
-      center: [40.6, -73.9],
+      center: [-73.966645, 40.781358],
       zoom: this.state.zoom,
     })
 
     this.setState({map})
 
-    const start = [-73.952793, 40.672555]
-
     
   }
 
-
+componentDidUpdate(prevProps, prevState){
+  if (this.props.coords !== prevProps.coords) {
+    console.log("prevProps:", prevProps.coords)
+    console.log("new props:", this.props)
+  } else {
+    console.log("damn")
+  }
+}
 
   render() {
     const miles = this.state.prefMiles

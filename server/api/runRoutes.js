@@ -7,7 +7,7 @@ const {Route, User} = require('../db/models')
 router.get('/:runId', async (req, res, next) => {
     try {
         console.log('----------> runId is', req.params.runId)
-        const run = await Route.findById(req.params.runId)
+        const run = await Route.findByPk(req.params.runId)
         res.status(200).send(run)
     } catch (error) {
         next(error)

@@ -25,7 +25,8 @@ const getAllUserRoutes = routes => ({
 export const getCurrentRouteThunk = id => {
   return async dispatch => {
     try {
-      const {data} = Axios.get(`/api/routes/${id}`)
+      const {data} = await Axios.get(`/api/routes/${id}`)
+      console.log("data is", data)
       dispatch(getCurrentRoute(data))
     } catch (error) {
       console.error(error)
@@ -36,8 +37,8 @@ export const getCurrentRouteThunk = id => {
 export const createNewRouteThunk = (coords, name, state, city, country, userId) => {
   return async dispatch => {
     try {
-      const {data} = Axios.post('/api/routes/', {coords, name, state, city, country, userId})
-      dispatch(createNewRoute(data))
+      const {data} = await Axios.post('/api/routes/', {coords, name, state, city, country, userId})
+      dispatch(createNewRoute(data.coords))
     } catch (error) {
       console.error(error)
     }
