@@ -1,18 +1,17 @@
 import React, {Component} from 'react'
-import {LoadScript, GoogleMap, fitBounds} from '@react-google-maps/api'
 import mapboxgl, {Marker} from 'mapbox-gl'
-import {getDistance, computeDestinationPoint} from 'geolib'
 import {getRandomPointsInRadius, milesToMeters} from '../../utils'
 import {connect} from 'react-redux'
 import {createNewRouteThunk} from '../store/routes'
 import {me} from '../store/user'
-import uniqid from 'uniqid'
-import axios from 'axios'
-import '../../secrets'
 
 import PlacesAutocomplete from './PlacesAutocomplete'
+import '../../secrets'
+
 
 mapboxgl.accessToken = process.env.MAPBOX
+
+//used inside create route method (taken out to remove fluff)
 const addLayerToMap = (map, geojson) => {
   map.addLayer({
     id: 'route',
@@ -39,7 +38,6 @@ const addLayerToMap = (map, geojson) => {
     },
   })
 }
-// create a function to make a directions request
 
 class HomeMap extends Component {
   constructor(props) {
@@ -98,9 +96,7 @@ class HomeMap extends Component {
       this.state.homeMarker.remove()
     }
     const homeMarker = new Marker().setLngLat([lng, lat]).addTo(this.state.map)
-
     this.setState({lng, lat, homeMarker, state, city, country})
-
     this.state.map.flyTo({
       center: [lng, lat],
       minZoom: 3,
@@ -161,7 +157,6 @@ class HomeMap extends Component {
         <div className="mapChild" id="instructions">
           <PlacesAutocomplete changeLtLng={this.changeLtLng} />
           <form>
-            <span>{this.state.prefMiles}</span>
             <button
               type="submit"
               onClick={(e) => {this.createRoute(e, this.state)}}
@@ -175,7 +170,6 @@ class HomeMap extends Component {
           <button
           onClick={(e) => {
             const stringifiedRoute = JSON.stringify(this.state.curRoute)
-            const {state, city, country} = this.state
             this.props.createNewRoute(stringifiedRoute, this.state.runName, this.state.state, this.state.city, this.state.country, this.props.userId)
             this.setState({runName: '', routeOnScreen: false})
           }}
@@ -183,14 +177,11 @@ class HomeMap extends Component {
           >Save route</button>
           </div>
           <button onClick={this.plus}>+</button>
+          <span>{this.state.prefMiles} preffered miles</span>
           <button
-            onClick={(e) => {
-              this.setState({prefMiles: miles - 1})
-            }}
+            onClick={(e) => {this.setState({prefMiles: miles - 1})}}
             disabled={this.state.prefMiles === 1 ? true : false}
-          >
-            -
-          </button>
+          >-</button>
           <div>
             <p> This run is: {(this.state.routeMiles).toFixed(3)} miles</p>
           </div>
