@@ -90,46 +90,16 @@ class HomeMap extends Component {
       state.lng,
       state.prefMiles
     )
-    const milesToMeters = (miles) => {
-      return miles / 0.00062137
-    }
     const {map} = state
-    // make a directions request using cycling profile
-    // an arbitrary start will always be the same
-    // only the end or destination will change
-    const url =
-      'https://api.mapbox.com/directions/v5/mapbox/walking/' +
-      state.lng +
-      ',' +
-      state.lat +
-      ';' +
-      waypoints[0].longitude +
-      ',' +
-      waypoints[0].latitude +
-      ';' +
-      waypoints[1].longitude +
-      ',' +
-      waypoints[1].latitude +
-      ';' +
-      state.lng +
-      ',' +
-      state.lat +
-      '?steps=true&geometries=geojson&access_token=' +
-      mapboxgl.accessToken
-
-    // make an XHR request https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
+    const url =`https://api.mapbox.com/directions/v5/mapbox/walking/${state.lng},${state.lat};${waypoints[0].longitude},${waypoints[0].latitude};${waypoints[1].longitude},${waypoints[1].latitude};${state.lng},${state.lat}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`
     const req = new XMLHttpRequest()
+
     req.open('GET', url, true)
     req.onload = () => {
       let json = JSON.parse(req.response)
       let data = json.routes[0]
       let route = data.geometry.coordinates
       let miles = data.distance * 0.00062137
-      console.log(
-        'these are the miles!!!!:',
-        data.distance * 0.00062137,
-        miles / state.prefMiles
-      )
 
       let geojson = {
         type: 'Feature',
@@ -140,13 +110,10 @@ class HomeMap extends Component {
         },
       }
       this.setState({routeMiles: miles, curRoute: geojson.geometry.coordinates})
-      // if the route already exists on the map, reset it using setData
+
       if (map.getSource('route')) {
         map.getSource('route').setData(geojson)
-        console.log('GEO IS', geojson)
       } else {
-        console.log('lol there is none')
-        // otherwise, make a new request
         map.addLayer({
           id: 'route',
           type: 'line',
@@ -173,7 +140,6 @@ class HomeMap extends Component {
         })
         map.getSource('route').setData(geojson)
       }
-      // add turn instructions here at the end
     }
     req.send()
     map.flyTo({
@@ -236,7 +202,7 @@ class HomeMap extends Component {
             -
           </button>
           <div>
-            <p> This run is: {this.state.routeMiles}</p>
+            <p> This run is: {(this.state.routeMiles).toFixed(3)} miles</p>
           </div>
         </div>
       </div>
