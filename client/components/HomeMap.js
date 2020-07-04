@@ -13,14 +13,40 @@ import '../../secrets'
 import PlacesAutocomplete from './PlacesAutocomplete'
 
 mapboxgl.accessToken = process.env.MAPBOX
+const addLayerToMap = (map, geojson) => {
+  map.addLayer({
+    id: 'route',
+    type: 'line',
+    source: {
+      type: 'geojson',
+      data: {
+        type: 'Feature',
+        properties: {},
+        geometry: {
+          type: 'LineString',
+          coordinates: geojson,
+        },
+      },
+    },
+    layout: {
+      'line-join': 'round',
+      'line-cap': 'round',
+    },
+    paint: {
+      'line-color': 'purple',
+      'line-width': 5,
+      'line-opacity': 0.75,
+    },
+  })
+}
 // create a function to make a directions request
 
 class HomeMap extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      lng: -73.952793,
-      lat: 40.672555,
+      lng: -73.986287,
+      lat: 40.748538,
       zoom: 15,
       origin: '',
       destination: '',
@@ -51,7 +77,6 @@ class HomeMap extends Component {
 
     this.setState({map})
 
-    const start = [-73.952793, 40.672555]
   }
 
   minus(e) {
@@ -83,7 +108,7 @@ class HomeMap extends Component {
     })
   }
 
-  async createRoute(e, state, destination) {
+  async createRoute(e, state) {
     e.preventDefault()
     const waypoints = await getRandomPointsInRadius(
       state.lat,
@@ -100,7 +125,6 @@ class HomeMap extends Component {
       let data = json.routes[0]
       let route = data.geometry.coordinates
       let miles = data.distance * 0.00062137
-
       let geojson = {
         type: 'Feature',
         properties: {},
@@ -110,34 +134,10 @@ class HomeMap extends Component {
         },
       }
       this.setState({routeMiles: miles, curRoute: geojson.geometry.coordinates})
-
       if (map.getSource('route')) {
         map.getSource('route').setData(geojson)
       } else {
-        map.addLayer({
-          id: 'route',
-          type: 'line',
-          source: {
-            type: 'geojson',
-            data: {
-              type: 'Feature',
-              properties: {},
-              geometry: {
-                type: 'LineString',
-                coordinates: geojson,
-              },
-            },
-          },
-          layout: {
-            'line-join': 'round',
-            'line-cap': 'round',
-          },
-          paint: {
-            'line-color': 'purple',
-            'line-width': 5,
-            'line-opacity': 0.75,
-          },
-        })
+        addLayerToMap(map, geojson)
         map.getSource('route').setData(geojson)
       }
     }
@@ -154,12 +154,6 @@ class HomeMap extends Component {
     const miles = this.state.prefMiles
     return (
       <div>
-        <div className="map-container">
-          <div className="mapChild">
-            Longitude: {this.state.lng} | Latitude: {this.state.lat} | Zoom:{' '}
-            {this.state.zoom}
-          </div>
-        </div>
         <div
           ref={(el) => (this.mapContainer = el)}
           className="mapContainer mapChild"
@@ -170,11 +164,7 @@ class HomeMap extends Component {
             <span>{this.state.prefMiles}</span>
             <button
               type="submit"
-
-              onClick={(e) => {
-                this.createRoute(e, this.state)
-                console.log('the state issss>>', this.state)
-              }}
+              onClick={(e) => {this.createRoute(e, this.state)}}
             >
               Find route!
             </button>
