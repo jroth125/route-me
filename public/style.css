@@ -58,3 +58,38 @@ form div {
   line-height: 2em;
 
 }
+
+
+/* .location-search-input {
+  width: 80%;
+  padding: 16px;
+  font-size: 16px;
+  border-radius: 2px;
+  outline: none;
+} */
+.location-search-input {
+  border: honeydew;
+  box-shadow: 0 1px 1px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
+  display: block;
+  width: 80%;
+  padding: 16px;
+  font-size: 16px;
+  border-radius: 2px;
+  outline: none;
+}
+
+.location-search-input:focus {
+  box-shadow: 0 3px 3px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
+
+}
+
+.autocomplete-dropdown-container {
+  border-bottom: honeydew;
+  border-left: honeydew;
+  border-right: honeydew;
+  border-top: 1px solid #e6e6e6;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  position: absolute;
+  z-index: 1000;
+  border-radius: 0 0 2px 2px;
+}
