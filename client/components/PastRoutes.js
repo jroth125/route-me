@@ -31,7 +31,7 @@ class PastRoutes extends Component {
                         <td><Link onClick={() => this.props.updateCurrentRoute(route)} to={`/past/${route.id}`}>{route.name}</Link></td>
                         <td>{route.city}</td>
                         <td>{route.state}</td>
-                        <td>{route.createdAt}</td>
+                        <td>{new Date(route.createdAt).toDateString()}</td>
                     </tr>
                     )
                 }) : null}
