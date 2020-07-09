@@ -21,6 +21,13 @@ const Route = db.define('route', {
             len: [2, 2]
         }
     },
+    distance: {
+        type: Sequelize.FLOAT,
+        allowNull: false,
+        validate: {
+            min: 0
+        }
+    },
     country: {
         type: Sequelize.STRING,
         allowNull: true

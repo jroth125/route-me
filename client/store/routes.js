@@ -35,10 +35,10 @@ export const getCurrentRouteThunk = id => {
   }
 }
 
-export const createNewRouteThunk = (coords, name, state, city, country, userId) => {
+export const createNewRouteThunk = (coords, name, state, city, country, distance, userId) => {
   return async dispatch => {
     try {
-      const {data} = await Axios.post('/api/routes/', {coords, name, state, city, country, userId})
+      const {data} = await Axios.post('/api/routes/', {coords, name, state, city, country, distance, userId})
       dispatch(createNewRoute(data))
     } catch (error) {
       console.error(error)

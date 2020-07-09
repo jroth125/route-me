@@ -202,6 +202,7 @@ class HomeMap extends Component {
                   this.state.state,
                   this.state.city,
                   this.state.country,
+                  this.state.routeMiles,
                   this.props.userId
                 )
                 this.setState({runName: '', routeOnScreen: false})
@@ -224,8 +225,8 @@ const mapStateToProps = (state) => ({
   userId: state.user.id,
 })
 const mapDispatchToProps = (dispatch) => ({
-  createNewRoute: (coords, name, state, city, country, userId) =>
-    dispatch(createNewRouteThunk(coords, name, state, city, country, userId)),
+  createNewRoute: (coords, name, state, city, country, distance, userId) =>
+    dispatch(createNewRouteThunk(coords, name, state, city, country, distance, userId)),
   getUser: () => dispatch(me()),
 })
 
