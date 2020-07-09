@@ -8,7 +8,6 @@ import {me} from '../store/user'
 import PlacesAutocomplete from './PlacesAutocomplete'
 import '../../secrets'
 
-
 mapboxgl.accessToken = process.env.MAPBOX
 
 //used inside create route method (taken out to remove fluff)
@@ -57,7 +56,7 @@ class HomeMap extends Component {
       state: '',
       city: '',
       country: '',
-      routeOnScreen: false
+      routeOnScreen: false,
     }
     this.plus = this.plus.bind(this)
     this.minus = this.plus.bind(this)
@@ -74,7 +73,6 @@ class HomeMap extends Component {
     })
 
     this.setState({map})
-
   }
 
   minus(e) {
@@ -88,7 +86,7 @@ class HomeMap extends Component {
   }
 
   handleChange(e) {
-   this.setState({[e.target.name]: e.target.value})
+    this.setState({[e.target.name]: e.target.value})
   }
 
   changeLtLng(lng, lat, city, state, country) {
@@ -112,7 +110,7 @@ class HomeMap extends Component {
       state.prefMiles
     )
     const {map} = state
-    const url =`https://api.mapbox.com/directions/v5/mapbox/walking/${state.lng},${state.lat};${waypoints[0].longitude},${waypoints[0].latitude};${waypoints[1].longitude},${waypoints[1].latitude};${state.lng},${state.lat}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`
+    const url = `https://api.mapbox.com/directions/v5/mapbox/walking/${state.lng},${state.lat};${waypoints[0].longitude},${waypoints[0].latitude};${waypoints[1].longitude},${waypoints[1].latitude};${state.lng},${state.lat}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`
     const req = new XMLHttpRequest()
 
     req.open('GET', url, true)
@@ -155,35 +153,66 @@ class HomeMap extends Component {
           className="mapContainer mapChild"
         />
         <div className="mapChild" id="instructions">
-          <PlacesAutocomplete changeLtLng={this.changeLtLng} />
+          <div id="search-bar">
+            <PlacesAutocomplete changeLtLng={this.changeLtLng} />
+          </div>
+          <div className="route-set-container">
+            <div className="plus-minus-buttons route-set-container-child">
+              <button className="plus-minus" onClick={this.plus}>+</button>
+              <span id="miles">{this.state.prefMiles} mi</span>
+              <button
+                className="plus-minus"
+                onClick={(e) => {
+                  this.setState({prefMiles: miles - 1})
+                }}
+                disabled={this.state.prefMiles === 1 ? true : false}
+              >
+                -
+              </button>
+            </div>
+            <div className="route-set-container-child">
+              <button
+                className="route-button"
+                type="submit"
+                onClick={(e) => {
+                  this.createRoute(e, this.state)
+                }}
+              >
+                Find route!
+              </button>
+            </div>
+          </div>
           <form>
-            <button
-              type="submit"
-              onClick={(e) => {this.createRoute(e, this.state)}}
-            >
-              Find route!
-            </button>
             <label htmlFor="runName">Name your run:</label>
-            <input type="text" name="runName" value={this.state.runName} disabled={!this.state.routeOnScreen} onChange={(e) => this.handleChange(e)}/>
+            <input
+              type="text"
+              name="runName"
+              value={this.state.runName}
+              disabled={!this.state.routeOnScreen}
+              onChange={(e) => this.handleChange(e)}
+            />
           </form>
           <div>
-          <button
-          onClick={(e) => {
-            const stringifiedRoute = JSON.stringify(this.state.curRoute)
-            this.props.createNewRoute(stringifiedRoute, this.state.runName, this.state.state, this.state.city, this.state.country, this.props.userId)
-            this.setState({runName: '', routeOnScreen: false})
-          }}
-          disabled={!this.state.routeOnScreen || !this.state.runName}
-          >Save route</button>
+            <button
+              onClick={(e) => {
+                const stringifiedRoute = JSON.stringify(this.state.curRoute)
+                this.props.createNewRoute(
+                  stringifiedRoute,
+                  this.state.runName,
+                  this.state.state,
+                  this.state.city,
+                  this.state.country,
+                  this.props.userId
+                )
+                this.setState({runName: '', routeOnScreen: false})
+              }}
+              disabled={!this.state.routeOnScreen || !this.state.runName}
+            >
+              Save route
+            </button>
           </div>
-          <button onClick={this.plus}>+</button>
-          <span>{this.state.prefMiles} preffered miles</span>
-          <button
-            onClick={(e) => {this.setState({prefMiles: miles - 1})}}
-            disabled={this.state.prefMiles === 1 ? true : false}
-          >-</button>
           <div>
-            <p> This run is: {(this.state.routeMiles).toFixed(3)} miles</p>
+            <p> This run is: {this.state.routeMiles.toFixed(3)} miles</p>
           </div>
         </div>
       </div>
@@ -192,11 +221,12 @@ class HomeMap extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  userId: state.user.id
+  userId: state.user.id,
 })
 const mapDispatchToProps = (dispatch) => ({
-  createNewRoute: (coords, name, state, city, country, userId) => dispatch(createNewRouteThunk(coords, name, state, city, country, userId)),
-  getUser: () => dispatch(me())
+  createNewRoute: (coords, name, state, city, country, userId) =>
+    dispatch(createNewRouteThunk(coords, name, state, city, country, userId)),
+  getUser: () => dispatch(me()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeMap)
