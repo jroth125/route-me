@@ -163,3 +163,32 @@ form div {
   transform: translateY(2px);
 }
 
+.past-routes-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.past-routes {
+  align-self: center;
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 90%;
+}
+
+.past-routes thead {
+  font-style: oblique;
+  font-weight: bold;
+}
+.past-routes tbody tr:nth-child(odd) {
+  background-color: antiquewhite
+}
+.past-routes tbody tr:hover {
+  background-color: rgb(218, 218, 218);
+}
+
+
+
+.past-routes td {
+  border: 1px solid #dddddd;
+  padding: 5px;
+}

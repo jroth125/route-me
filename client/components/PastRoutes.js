@@ -17,8 +17,8 @@ class PastRoutes extends Component {
   render() {
     console.log('the user id is', this.props.userId)
     return (
-      <div>
-        <table>
+      <div className="past-routes-container">
+        <table className="past-routes">
           <thead>
             <tr>
               <td>Name</td>
