@@ -19,33 +19,37 @@ class PastRoutes extends Component {
     return (
       <div>
         <table>
-          <tr>
-            <td>Name</td>
-            <td>Miles</td>
-            <td>City</td>
-            <td>State</td>
-            <td>Date Created</td>
-          </tr>
-          {this.props.routes
-            ? this.props.routes.map((route, idx) => {
-                return (
-                  <tr key={route.id}>
-                    <td>
-                      <Link
-                        onClick={() => this.props.updateCurrentRoute(route)}
-                        to={`/past/${route.id}`}
-                      >
-                        {route.name}
-                      </Link>
-                    </td>
-                    <td>{route.distance.toFixed(2)}</td>
-                    <td>{route.city}</td>
-                    <td>{route.state}</td>
-                    <td>{new Date(route.createdAt).toDateString()}</td>
-                  </tr>
-                )
-              })
-            : null}
+          <thead>
+            <tr>
+              <td>Name</td>
+              <td>Miles</td>
+              <td>City</td>
+              <td>State</td>
+              <td>Date Created</td>
+            </tr>
+          </thead>
+          <tbody>
+            {this.props.routes
+              ? this.props.routes.map((route, idx) => {
+                  return (
+                    <tr key={route.id}>
+                      <td>
+                        <Link
+                          onClick={() => this.props.updateCurrentRoute(route)}
+                          to={`/past/${route.id}`}
+                        >
+                          {route.name}
+                        </Link>
+                      </td>
+                      <td>{route.distance.toFixed(2)}</td>
+                      <td>{route.city}</td>
+                      <td>{route.state}</td>
+                      <td>{new Date(route.createdAt).toDateString()}</td>
+                    </tr>
+                  )
+                })
+              : null}
+          </tbody>
         </table>
       </div>
     )
