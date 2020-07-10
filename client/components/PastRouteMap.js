@@ -59,6 +59,9 @@ class PastRouteMap extends Component {
             'line-opacity': 0.75,
           },
         })
+        let homeMarker = new mapboxgl.Marker()
+        .setLngLat(coords[0])
+        .addTo(map)
       })
     } else {
       this.props.getCurRoute(this.props.match.params.routeId)
@@ -104,6 +107,10 @@ class PastRouteMap extends Component {
             'line-opacity': 0.75,
           },
         })
+        let startMarker = new mapboxgl.Marker()
+        .setLngLat(this.props.coords[0])
+        .addTo(map)
+
         map.flyTo({center: coords[mid], zoom: 14, essential: false})
       })
     }
