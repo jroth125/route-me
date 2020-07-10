@@ -1,5 +1,6 @@
 body {
   font-family: sans-serif;
+  margin: 0px;
 }
 
 a {
@@ -10,10 +11,40 @@ label {
   display: block;
 }
 
+.nav-container {
+  background-color: rgb(37, 77, 136);
+}
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+nav hr {
+  margin: 0px;
+}
+
+nav > .navLinkContainer {
+  width: 40%;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+nav #route-me-name {
+  margin-left: 30px;
+}
+
+#route-me-name > h1 {
+  color: #feffe9;
+}
+
 nav a {
   display: inline-block;
   margin: 1em;
+  color: #feffe9;
 }
+
+
 
 form div {
   margin: 1em;
@@ -21,7 +52,7 @@ form div {
 }
 
 .mapContainer {
-  margin-top: 140px;
+  margin-top: 78px;
   position: absolute;
   top: 0;
   right: 0;
@@ -46,7 +77,7 @@ form div {
 
 #instructions {
   position: absolute;
-  margin-top: 140px;
+  margin-top: 78px;
   width: 25%;
   height: 300px;
   top: 0;
